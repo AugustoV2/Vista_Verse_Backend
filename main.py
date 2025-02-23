@@ -58,6 +58,8 @@ def handle_message(data):
                 print(f"Question: {question}")
                 print(f"Title: {title}")
                 print(f"Response: {response}")
+               
+                emit('message', f"{response}", room=request.sid)
             except Exception as e:
                 print(f"Error generating response from Gemini: {e}")
                 emit('message', "Error: Failed to generate a response. Please try again.", room=request.sid)
@@ -80,9 +82,9 @@ def handle_message(data):
                     emit('message', "Error: Failed to save the question. Please try again.", room=request.sid)
                     return
 
-            emit('message', response, broadcast=True, include_self=False)
+            emit('message', response, broadcast=True, include_self=True)
         else:
-            emit('message', data, broadcast=True, include_self=False)
+            emit('message', data, broadcast=True, include_self=True)
     except Exception as e:
         print(f"Error handling message: {e}")
         emit('message', "An error occurred while processing your request.", room=request.sid)
